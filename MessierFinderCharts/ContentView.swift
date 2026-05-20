@@ -12,7 +12,7 @@ struct ContentView: View {
             ZStack {
 
                 // BACKGROUND IMAGE (correct rotation + layout swap)
-                Image(backgroundImageName)
+                Image(backgroundImageName(isLandscape: isLandscape))
                     .resizable()
                     .scaledToFit()
                     .frame(
@@ -29,13 +29,13 @@ struct ContentView: View {
 
                     Picker("Select Object", selection: $selectedItem) {
                         ForEach(items, id: \.self) { item in
-                            Text(item).tag(item)
+                            Text(isLandscape ? item : itemWithoutRADec(item)).tag(item)
                         }
                     }
                     .pickerStyle(.wheel)
                     .frame(height: 90)
                     .clipped()
-                    .background(.ultraThinMaterial)
+                    .background(Color.red)
 
                     Spacer()
                 }
@@ -52,10 +52,20 @@ struct ContentView: View {
     }
 
     // Convert "M-1 Supernova Remnant" → "m1"
-    var backgroundImageName: String {
+    // Because this logic depends on geometry (isLandscape), 
+    // pass in the geometry-dependent parameter rather than relying on a stored property.
+    func backgroundImageName(isLandscape: Bool) -> String {
         (selectedItem.components(separatedBy: " ").first ?? "")
             .replacingOccurrences(of: "-", with: "")
             .lowercased()
+    }
+
+    private func itemWithoutRADec(_ item: String) -> String {
+        if let range = item.range(of: "RA/DEC:") {
+            return String(item[..<range.lowerBound]).trimmingCharacters(in: .whitespaces)
+        } else {
+            return item
+        }
     }
 
     func loadMessierData() {
@@ -72,9 +82,11 @@ struct ContentView: View {
                 .filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
 
             items = lines
-
-            if let first = lines.first {
-                selectedItem = first
+            
+            if !items.isEmpty {
+                if let first = lines.first {
+                    selectedItem = first
+                }
             }
 
         } catch {

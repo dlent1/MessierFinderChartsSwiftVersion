@@ -108,3 +108,4 @@ M-107 Globular Cluster, Mag: 8.1 RA/DEC: 16h32.5m −13°03′
 M-108 Barred Spiral Galaxy, Mag: 10.0 RA/DEC: 11h11.5m +55°40′
 M-109 Barred Spiral Galaxy, Mag: 9.8 RA/DEC: 11h57.6m +53°23′
 M-110 Dwarf Ellip. Galaxy, Mag: 8.1 RA/DEC: 00h40.4m +41°41′
+NGC-7009 Planetary Nebula, Mag: 8.0 RA/DEC: 21h 04m 10s −11° 21′ 48″
